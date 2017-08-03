@@ -10,8 +10,8 @@ class Person < ActiveRecord::Base
 
   def self.find_user(find_name)
     new_person = self.find_or_create_by(name: find_name)
-    new_person.save
     new_person.get_zip if new_person.zip.nil?
+    new_person.save
     new_person
   end
 
@@ -65,13 +65,19 @@ class Person < ActiveRecord::Base
     change_options.each_with_index do |option, idx|
       puts "#{idx+1}: #{option}"
     end
-    user_to_sym = change_options[gets.chomp.to_i-1].to_sym
-    puts "What do you want to change it to?"
-    user_updated = gets.chomp
-    Todo.update(todo_hash[user].id, user_to_sym => user_updated)
-    delete_completed(todo_hash[user])
-    self.reload
-    self.print_indexed_list
+    puts "#{change_options.length + 1}: add users to this todo"
+    user_response = gets.chomp
+    if user_response.to_i <= change_options.length - 1
+      change_options[user_response.to_i-1].to_sym
+      puts "What do you want to change it to?"
+      user_updated = gets.chomp
+      Todo.update(todo_hash[user].id, user_to_sym => user_updated)
+      delete_completed(todo_hash[user])
+      self.reload
+      self.print_indexed_list
+    else
+      add_user_to_new_todo(todo_hash[user])
+    end
   end
 
   def due_by_days
