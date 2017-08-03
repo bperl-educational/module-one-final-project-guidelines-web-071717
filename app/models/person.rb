@@ -3,16 +3,15 @@ class Person < ActiveRecord::Base
   has_many :person_todos
   has_many :todos, through: :person_todos, dependent: :destroy
 
-  def initialize(name:, zip:)
+  def initialize(name:)
     super
     @name = name
-    @zip = zip
   end
 
   def self.find_user(find_name)
     new_person = self.find_or_create_by(name: find_name)
-    new_person.get_zip if new_person.zip.nil?
     new_person.save
+    new_person.get_zip if new_person.zip.nil?
     new_person
   end
 
@@ -111,7 +110,7 @@ class Person < ActiveRecord::Base
   # end
 
   def add_user_to_new_todo(todo_add)
-    puts "Add another user to todo?"
+    puts "Add another user to todo? (y/n)"
     input = gets.chomp.downcase
     if input == 'yes' || input == 'y'
       self.show_users

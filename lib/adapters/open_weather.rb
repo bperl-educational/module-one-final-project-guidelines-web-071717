@@ -13,7 +13,7 @@ module OpenWeather
 
       data = JSON.parse(response.body)
 
-      puts "The weather is currently #{data["current_observation"]["weather"]}, #{data["current_observation"]["temperature_string"]}, and the relative humidity is #{data["current_observation"]["relative_humidity"]}."
+      puts "The weather is currently #{data["current_observation"]["weather"]}, #{data["current_observation"]["temperature_string"]}, and the relative humidity is #{data["current_observation"]["relative_humidity"]}.\n"
 
     end
 
