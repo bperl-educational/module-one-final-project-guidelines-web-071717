@@ -113,28 +113,23 @@ class Person < ActiveRecord::Base
     all_people_m_self = Person.all - [self]
   end
 
-  def show_users(users)
-    users.each_with_index do |person, idx|
+  def show_users
+    all_people_minus_self.each_with_index do |person, idx|
       puts "#{idx+1}: #{person.name}" unless person == self
     end
-  end
-
-  def all_minus_todoers(todo)
-    all_people_minus_self - todo.people
   end
 
   def add_user_to_new_todo(todo_add)
     puts "Add another user to todo? (y/n)"
     input = gets.chomp.downcase
     if input == 'yes' || input == 'y'
-      self.show_users(all_minus_todoers(todo_add))
+      self.show_users
       puts "Enter the number of the user(s) to add: "
       user_choice = gets.chomp
       user_choice_array = user_choice.delete(" ").split(",")
       user_choice_array.each do |user_choice|
-        self.all_minus_todoers(todo_add)[user_choice.to_i - 1].todos << todo_add
+        self.all_people_minus_self[user_choice.to_i - 1].todos << todo_add
       end
-      self.save
     end
   end
 
